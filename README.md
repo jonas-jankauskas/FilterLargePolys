@@ -3,7 +3,7 @@ Command line tools to filter out {0, 1} polynomials with large minima on the uni
 
 ## Contents
 
-*filter101seq.c* - a C program to filter binary sequences with large minimal absolute values of their [Fast Fourier Transform](https://en.wikipedia.org/wiki/Fast_Fourier_transform).
+[*filter101seq*](https://github.com/jonas-jankauskas/FilterLargePolys/blob/main/filter101seq.c) - a C program to filter binary sequences with large minimal absolute values of their [Fast Fourier Transform](https://en.wikipedia.org/wiki/Fast_Fourier_transform).
 
 **Command line**
 
@@ -34,7 +34,7 @@ user@user_machine:~/FFT$ ./filter101seq 64 10 0.9
 ```
 ---
 
-*doFFT.c* - a simple C program to evaluate minimal absolute FFT value of a given {0,1} binary sequence.
+[*doFFT*](https://github.com/jonas-jankauskas/FilterLargePolys/blob/main/doFFT.c) - a simple C program to evaluate minimal absolute FFT value of a given {0,1} binary sequence.
 
 **Command line**
 
