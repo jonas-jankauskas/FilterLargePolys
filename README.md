@@ -63,7 +63,7 @@ You need [FFTW3 library](https://www.fftw.org/) for the Fast-Fourier Transform a
 
 For instance, on my *Ubuntu 20.24* machine, *FFTW3* library (called *libfftw3-bin*) comes installed by default. Lets check it:
 ```
-sudo apt search libfftw3-bin
+user@user_machine:~/FFT$ sudo apt search libfftw3-bin
 [sudo] user password: ********** 
 Sorting... Done
 Full Text Search... Done
@@ -74,6 +74,12 @@ libfftw3-bin/focal,now 3.3.8-2ubuntu1 amd64 [installed,automatic]
 The header files are contained in 'libfftw3-dev. It can be installed like this:
 
 `sudo apt install libfftw3-dev`
+
+After downloading the .c files from *GitHub*, compile them with:
+```
+user@user_machine:~/FFT$ gcc -o filter101seq filter101seq.c -lfftw3 -lm
+user@user_machine:~/FFT$ gcc -o doFFT doFFT.c -lfftw3 -lm
+```
 
 # Important considerations
 
