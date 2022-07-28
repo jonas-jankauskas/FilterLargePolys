@@ -22,7 +22,7 @@ The program generates all *{0, 1}* binary sequences of length *l*, avoiding reve
 **Example**
 
 ```
-user@user_machine$./filter101seq 64 10 0.9
+user@user_machine:~/FFT$ ./filter101seq 64 10 0.9
 #Samples N=64, length=10, threshold t=0.900
 #Sequences and their FFT minima:
 1000101101   0.934
@@ -51,7 +51,7 @@ This program simply takes a *{0,1}*-string and returns the minimal absolute valu
 **Example**
 
 ```
-user@user_machine$ ./doFFT 512 1000101101
+user@user_machine:~/FFT$ ./doFFT 512 1000101101
 
 #FFT Minimal amplitude:
 0.9102364331
@@ -75,13 +75,69 @@ The header files are contained in 'libfftw3-dev. It can be installed like this:
 
 `sudo apt install libfftw3-dev`
 
-#Important considerations
+# Important considerations
 
 - The higher the number of sample points *N* in the FFT, the better the value *m* approximates the true minima of a *{0,1}* polynomial.
-- However, as larger *N* gets, the computations get slower.
+- All FFT computations are internaly done and the value *m* is returned using *C* real *double* type, which is typically limited to about 5-6 correct digits after decimal point.
+- As *l* and *N* becomes large, rounding errors tend to accumulate in FFT.
+- The larger *l* and *N* get, the slower computations become.
 - The FFT libraries typically are optimized for the best performance and reasonable accuracy when *N* is a power of 2.
-- All FFT computations are internaly done and the value *m* is returned using *C* double type, which is limited to no more than 5-6 correct digits after decimal point.
-- As *l* and *N* becomes large, due to rounding errors in FFT, the true minima might actually deviate from reported value of *m* (true minima typically is lower than a reported threshold, matching 2-4 decimal digits of *m*) and one gets more and more "false positive candidates".
+
+## Example
+
+The successive FFT minimas *m* of the binary sequence *1000101101* of length *l*=10 approximate the true minima of the polynomial as *N* increases from 2^4 to 2^21=2097152. The improvement in accuracy stops around *N*>2^19=524288 due to the limitations of the *C* real *double* type.
+
+```
+user@user_machine:~/FFT$ ./doFFT 16 1000101101
+DFT Minimal amplitude: 0.9862355235
+user@user_machine:~/FFT$ ./doFFT 32 1000101101
+DFT Minimal amplitude: 0.9862355235
+user@user_machine:~/FFT$ ./doFFT 64 1000101101
+DFT Minimal amplitude: 0.9335162464
+user@user_machine:~/FFT$ ./doFFT 128 1000101101
+DFT Minimal amplitude: 0.9151236997
+user@user_machine:~/FFT$ ./doFFT 256 1000101101
+DFT Minimal amplitude: 0.9115784013
+user@user_machine:~/FFT$ ./doFFT 512 1000101101
+DFT Minimal amplitude: 0.9102364331
+user@user_machine:~/FFT$ ./doFFT 1024 1000101101
+DFT Minimal amplitude: 0.9101108641
+user@user_machine:~/FFT$ ./doFFT 2048 1000101101
+DFT Minimal amplitude: 0.9099762003
+user@user_machine:~/FFT$ ./doFFT 4096 1000101101
+DFT Minimal amplitude: 0.9099762003
+user@user_machine:~/FFT$ ./doFFT 128 1000101101
+DFT Minimal amplitude: 0.9151236997
+user@user_machine:~/FFT$ ./doFFT 256 1000101101
+DFT Minimal amplitude: 0.9115784013
+user@user_machine:~/FFT$ ./doFFT 512 1000101101
+DFT Minimal amplitude: 0.9102364331
+user@user_machine:~/FFT$ ./doFFT 1024 1000101101
+DFT Minimal amplitude: 0.9101108641
+user@user_machine:~/FFT$ ./doFFT 2048 1000101101
+DFT Minimal amplitude: 0.9099762003
+user@user_machine:~/FFT$ ./doFFT 4096 1000101101
+DFT Minimal amplitude: 0.9099762003
+user@user_machine:~/FFT$ ./doFFT 8192 1000101101
+DFT Minimal amplitude: 0.9099726884
+user@user_machine:~/FFT$ ./doFFT 16384 1000101101
+DFT Minimal amplitude: 0.9099713548
+user@user_machine:~/FFT$ ./doFFT 32768 1000101101
+DFT Minimal amplitude: 0.9099712487
+user@user_machine:~/FFT$ ./doFFT 64536 1000101101
+DFT Minimal amplitude: 0.9099711235
+user@user_machine:~/FFT$ ./doFFT 131072 1000101101
+DFT Minimal amplitude: 0.9099711086
+user@user_machine:~/FFT$ ./doFFT 262144 1000101101
+DFT Minimal amplitude: 0.9099711074
+user@user_machine:~/FFT$ ./doFFT 524288 1000101101
+DFT Minimal amplitude: 0.9099711050
+user@user_machine:~/FFT$ ./doFFT 1048576 1000101101
+DFT Minimal amplitude: 0.9099711050
+user@user_machine:~/FFT$ ./doFFT 2097152 1000101101
+DFT Minimal amplitude: 0.9099711050
+```
+Due to the listed factors, one typically gets a lot of "false positive candidates", with true minima actually smaller than the threshold value *t*.
 
 ## Workflow with large *l*
 
@@ -94,8 +150,8 @@ When working with the long binary sequences (*l* >= 30), it is important to bala
 - Pipe the results into a large *.txt* file. eg.:
 `$ ./filter101seq 128 30 1.95 > results.txt`
 
--- After initial coarse filtering is complete, run a *doFFT* on each example in *results.txt* file, each time doubling the *N* value and removing more and more `false positives`, until a manageable number of examples are left.
+- After initial coarse filtering is complete, run a *doFFT* on each example in *results.txt* file, each time doubling the *N* value and removing more and more `false positives`, until a manageable number of examples are left.
 
--- Find the true minimas on the remaining examples with high accuracy (within correct 4-5 decimal digits) by running *doFFT* with a large *N*, say, *N*=4096 etc.
+- Find the true minimas on the remaining examples with high accuracy (within correct 4-5 decimal digits) by running *doFFT* with a large *N*, say, *N*=4096 etc. Here is an example how to compute the true FFT minima of 
 
--- Use the newly found largest of the *m* values (with a slight negative corection for possible rounding errors) as a threshold value to double-verify your results for the current length *l* and also as an initial threshold for larger *l*.
+- Use the newly found largest of the *m* values (with a slight negative corection for possible rounding errors) as a threshold value to double-verify your results for the current length *l* and also as an initial threshold for larger *l*.
