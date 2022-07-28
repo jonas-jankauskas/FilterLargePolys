@@ -17,7 +17,7 @@ Command line tools to filter out {0, 1} polynomials with large minima on the uni
 
 **Description**
 
-The program generates all *{0, 1}* binary sequences of length *l*, avoiding reversals and [palyndromes](https://en.wikipedia.org/wiki/Palindrome/). This is done using and asymetric version of [binary Gray code](https://en.wikipedia.org/wiki/Gray_code/) and evaluates their FFT minimal absolute value, say, *m* (that is, the minimal absolute value of the corresponding {0, 1} polynomial evaluated at every *N*-th root of unity). If that value *m* is less than the allowed threshold value *t*, the sequence is simply discarded. If *m>=t*, they are printed to *stdin* together with the minimal FFT absolute value *m*, which serves as an approximation of the true minima of the corresponding *{0, 1}* polynomial on the unit circle *|z|=1*.
+The program generates all *{0, 1}* binary sequences of length *l*, avoiding reversals and [palyndromes](https://en.wikipedia.org/wiki/Palindrome/). This is done using and asymetric version of [binary Gray code](https://en.wikipedia.org/wiki/Gray_code/) and evaluates their FFT minimal absolute value, say, *m* (that is, the minimal absolute value of the corresponding {0, 1} polynomial evaluated at every *N*-th root of unity). If that value *m* is less than the allowed threshold value *t*, the sequence is simply discarded. If *m>=t*, they are printed to *stdin* together with the minimal FFT absolute value *m*, which serves as an approximation of the true minima of the corresponding {0, 1} polynomial on the unit circle |*z*|=1.
 
 **Example**
 
@@ -46,7 +46,7 @@ user@user_machine:~/FFT$ ./filter101seq 64 10 0.9
 
 **Description**
 
-This program simply takes a *{0,1}*-string and returns the minimal absolute value *m* of its Fourier transform of size *N*. This corresponds to the evaluation of the corresponding *{0,1}*-polynomial whose coefficients match the given string *seq101* on the unit circle at each of the *N*-th roots of unity. As *N* increases, *m* approximates the true minima of that polynomial on the unit circle *|z|=1*.
+This program simply takes a {0,1}-string and returns the minimal absolute value *m* of its Fourier transform of size *N*. This corresponds to the evaluation of the corresponding {0,1}-polynomial whose coefficients match the given string *seq101* on the unit circle at each of the *N*-th roots of unity. As *N* increases, *m* approximates the true minima of that polynomial on the unit circle |*z*|=1.
 
 **Example**
 
@@ -83,7 +83,9 @@ user@user_machine:~/FFT$ gcc -o doFFT doFFT.c -lfftw3 -lm
 
 # Important considerations
 
-- The higher the number of sample points *N* in the FFT, the better the value *m* approximates the true minima of a *{0,1}* polynomial.
+## Factors affecting FFT accuracy and speed
+
+- The higher the number of sample points *N* in the FFT, the better the value *m* approximates the true minima of a {0,1} polynomial.
 - All FFT computations are internaly done and the value *m* is returned using *C* real *double* type, which is typically limited to about 5-6 correct digits after decimal point.
 - As *l* and *N* becomes large, rounding errors tend to accumulate in FFT.
 - The larger *l* and *N* get, the slower computations become.
@@ -91,7 +93,7 @@ user@user_machine:~/FFT$ gcc -o doFFT doFFT.c -lfftw3 -lm
 
 ## Example
 
-The successive FFT minimas *m* of the binary sequence *1000101101* of length *l*=10 approximate the true minima of the polynomial as *N* increases from 2^4 to 2^21=2097152. The improvement in accuracy stops around *N*>2^19=524288 due to the limitations of the *C* real *double* type.
+The successive FFT minimas *m* of the binary sequence 1000101101 of length *l*=10 approximate the true minima of the polynomial as *N* increases from 2^4 to 2^21=2097152. The improvement in accuracy essentially stops for *N*>2^19=524288 due to the limitations of the *C* real *double* type.
 
 ```
 user@user_machine:~/FFT$ ./doFFT 16 1000101101
