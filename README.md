@@ -158,7 +158,7 @@ When working with the long binary sequences (*l* >= 30), it is important to bala
 - Pipe the results into a large *.txt* file. eg.:
 `$ ./filter101seq 128 30 1.95 > results.txt`
 
-- After initial coarse filtering is complete, run a *doFFT* on each example in *results.txt* file, each time doubling the *N* value and removing more and more `false positives`, until a manageable number of examples are left.
+- After initial coarse filtering is complete, run a *doFFT* on each example in *results.txt* file, each time doubling the *N* value and removing more and more "false positives", until only a manageable small number of examples are left.
 
 - Find the true minimas on the remaining examples with high accuracy (within correct 4-5 decimal digits) by running *doFFT* with a large *N*, say, *N*=4096 etc. Here is an example how to compute the true FFT minima of 
 
