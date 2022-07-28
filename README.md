@@ -20,15 +20,15 @@ Command line tools to filter out {0, 1} polynomials with large minima on the uni
 **Example**
 
 ```
->filter101seq 64 10 0.85
-
-#Samples N=64, length=10, threshold t=0.850
-1000101101, min=0.934
-1001000111, min=1.000
-1011110011, min=0.916
+user$./filter101seq 64 10 0.85
+#Samples N=10, length=64, threshold t=0.900
+#Sequences and their FFT minima:
+1000101101   0.934
+1001000111   1.000
+1011110011   0.916
 #Total: 120
 #Left:  3
-#Time:  0.011569 sec.
+#Time:  0.011508 sec.
 ```
 ---
 
